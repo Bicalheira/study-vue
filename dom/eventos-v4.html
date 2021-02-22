@@ -1,0 +1,37 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<div id="app">
+  <p>{{ contador }}</p>
+  <button v-on:click="sum(5)">Somar 1</button>
+  <p v-on:mousemove="updateXY">
+    Mouse: {{ x }} e {{ y }}
+    <span v-on:mousemove.stop=""> Parar aqui! </span>
+  </p>
+  <a v-on:click.prevent="nope" href="https://google.com.br" target="_blank">Google</a>
+</div>
+
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      contador: 0,
+      x: 0,
+      y: 0,
+    },
+    methods: {
+      sum(adding) {
+        this.contador += adding;
+      },
+      updateXY(event) {
+        this.x = event.clientX;
+        this.y = event.clientY;
+      },
+      nope() {
+        console.log("nope");
+      },
+      // stop(event) {
+      //   event.stopPropagation();
+      // },
+    },
+  });
+</script>
