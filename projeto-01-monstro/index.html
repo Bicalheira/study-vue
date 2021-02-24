@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://unpkg.com/vue"></script>
+
+    <title>Monster's Slayer</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <section class="l-life u-container">
+        <div class="l-life__column">
+          <div class="l-life__name">player</div>
+
+          <div class="l-life__bar">
+            <div class="l-life__progress"></div>
+          </div>
+
+          <div class="l-life__percent">28%</div>
+        </div>
+
+        <div class="l-life__column">
+          <div class="l-life__name">Monster</div>
+
+          <div class="l-life__bar">
+            <div class="l-life__progress"></div>
+          </div>
+
+          <div class="l-life__percent">28%</div>
+        </div>
+      </section>
+
+      <section class="l-buttons u-container">
+        <ul class="l-buttons__list">
+          <li class="l-buttons__items">
+            <button class="l-buttons__button">Attack</button>
+          </li>
+
+          <li class="l-buttons__items">
+            <button class="l-buttons__button">Spacial Attack</button>
+          </li>
+
+          <li class="l-buttons__items">
+            <button class="l-buttons__button">Heal</button>
+          </li>
+
+          <li class="l-buttons__items">
+            <button class="l-buttons__button">Get Away</button>
+          </li>
+        </ul>
+      </section>
+
+      <section class="l-result"></section>
+
+      <section class="l-log"></section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
