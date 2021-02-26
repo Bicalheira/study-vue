@@ -7,6 +7,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="stylesheet" href="reset.css" />
     <link rel="stylesheet" href="style.css" />
 
     <script src="https://unpkg.com/vue"></script>
@@ -21,46 +22,90 @@
           <div class="l-life__name">player</div>
 
           <div class="l-life__bar">
-            <div class="l-life__progress"></div>
+            <div :style="{width: playerLife}" class="l-life__progress"></div>
           </div>
 
-          <div class="l-life__percent">28%</div>
+          <div class="l-life__percent">100%</div>
         </div>
 
         <div class="l-life__column">
           <div class="l-life__name">Monster</div>
 
           <div class="l-life__bar">
-            <div class="l-life__progress"></div>
+            <div :style="{width: monsterLife}" class="l-life__progress"></div>
           </div>
 
-          <div class="l-life__percent">28%</div>
+          <div class="l-life__percent">100%</div>
         </div>
       </section>
 
-      <section class="l-buttons u-container">
+      <section v-if="warning" class="l-warning u-container">
+        <h1 class="l-warning__text">Congratulation! You Win!</h1>
+      </section>
+
+      <section v-if="start" class="l-buttons u-container">
+        <button @click="startGame" class="l-buttons__button l-buttons__button--start">
+          Start the Game
+          <img class="l-buttons__image" src="./images/svg/play-button.svg" alt="Play Button" />
+        </button>
+      </section>
+
+      <section v-if="playAgain" class="l-buttons u-container">
+        <button class="l-buttons__button l-buttons__button--restart">
+          Play again?
+          <img class="l-buttons__image" src="./images/svg/go-back.svg" alt="Play Button" />
+        </button>
+      </section>
+
+      <section v-if="attackButtons" class="l-buttons u-container">
         <ul class="l-buttons__list">
           <li class="l-buttons__items">
-            <button class="l-buttons__button">Attack</button>
+            <button @click="attackDamage(3,6)" class="l-buttons__button l-buttons__button--attack">
+              Attack
+              <img class="l-buttons__image" src="./images/svg/sword.svg" alt="Sword" />
+            </button>
           </li>
 
           <li class="l-buttons__items">
-            <button class="l-buttons__button">Spacial Attack</button>
+            <button
+              @click="attackDamage(10,15)"
+              class="l-buttons__button l-buttons__button--special-attack"
+            >
+              Special Attack ({{specialAttackCount}})
+              <img class="l-buttons__image" src="./images/svg/swords.svg" alt="Swords" />
+            </button>
           </li>
 
           <li class="l-buttons__items">
-            <button class="l-buttons__button">Heal</button>
+            <button class="l-buttons__button l-buttons__button--heal">
+              Heal ({{healCount}})
+              <img class="l-buttons__image" src="./images/svg/magic-wand.svg" alt="Magic Wand" />
+            </button>
           </li>
 
           <li class="l-buttons__items">
-            <button class="l-buttons__button">Get Away</button>
+            <button @click="surrender" class="l-buttons__button l-buttons__button--get-away">
+              Surrender
+              <img class="l-buttons__image" src="./images/svg/logout.svg" alt="Logout" />
+            </button>
           </li>
         </ul>
       </section>
 
-      <section class="l-result"></section>
-
-      <section class="l-log"></section>
+      <section v-if="log" class="l-log u-container">
+        <ul class="l-log__list">
+          <li class="l-log__item">
+            <ul class="l-log__list-row">
+              <li class="l-log__item-row l-log__item-row--jogador">
+                O jogador atingiu o monstro com 6.
+              </li>
+              <li class="l-log__item-row l-log__item-row--monstro">
+                O monstro atingiu o jogador com 9.
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
     </div>
 
     <script src="app.js"></script>
