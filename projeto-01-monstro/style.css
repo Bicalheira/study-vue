@@ -88,8 +88,6 @@ button:focus {
 .l-life__progress {
   width: 100%;
   height: 100%;
-
-  background-color: #75dd7a;
 }
 
 /** Seção do quadro de aviso */
@@ -154,10 +152,25 @@ button:focus {
 
 /** Seção do log de batalha */
 
+.l-log__list {
+  max-height: 300px;
+
+  overflow-y: auto;
+}
+
+.l-log__item {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 .l-log__list-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
+}
+
+.l-log__list-row:not(:first-child) {
+  margin-bottom: 30px;
 }
 
 .l-log__item-row {

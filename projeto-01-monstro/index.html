@@ -22,25 +22,31 @@
           <div class="l-life__name">player</div>
 
           <div class="l-life__bar">
-            <div :style="{width: playerLife}" class="l-life__progress"></div>
+            <div
+              :style="[{width : playerWidth}, {backgroundColor: playerProgressColor}]"
+              class="l-life__progress"
+            ></div>
           </div>
 
-          <div class="l-life__percent">100%</div>
+          <div class="l-life__percent">{{playerLife}}%</div>
         </div>
 
         <div class="l-life__column">
           <div class="l-life__name">Monster</div>
 
           <div class="l-life__bar">
-            <div :style="{width: monsterLife}" class="l-life__progress"></div>
+            <div
+              :style="[{width : monsterWidth}, {backgroundColor: monsterProgressColor}]"
+              class="l-life__progress"
+            ></div>
           </div>
 
-          <div class="l-life__percent">100%</div>
+          <div class="l-life__percent">{{monsterLife}}%</div>
         </div>
       </section>
 
       <section v-if="warning" class="l-warning u-container">
-        <h1 class="l-warning__text">Congratulation! You Win!</h1>
+        <h1 class="l-warning__text">{{warningText}}</h1>
       </section>
 
       <section v-if="start" class="l-buttons u-container">
@@ -51,7 +57,7 @@
       </section>
 
       <section v-if="playAgain" class="l-buttons u-container">
-        <button class="l-buttons__button l-buttons__button--restart">
+        <button @click="restartGame" class="l-buttons__button l-buttons__button--restart">
           Play again?
           <img class="l-buttons__image" src="./images/svg/go-back.svg" alt="Play Button" />
         </button>
@@ -60,31 +66,28 @@
       <section v-if="attackButtons" class="l-buttons u-container">
         <ul class="l-buttons__list">
           <li class="l-buttons__items">
-            <button @click="attackDamage(3,6)" class="l-buttons__button l-buttons__button--attack">
+            <button @click="attack(1)" class="l-buttons__button l-buttons__button--attack">
               Attack
               <img class="l-buttons__image" src="./images/svg/sword.svg" alt="Sword" />
             </button>
           </li>
 
           <li class="l-buttons__items">
-            <button
-              @click="attackDamage(10,15)"
-              class="l-buttons__button l-buttons__button--special-attack"
-            >
+            <button @click="attack(2)" class="l-buttons__button l-buttons__button--special-attack">
               Special Attack ({{specialAttackCount}})
               <img class="l-buttons__image" src="./images/svg/swords.svg" alt="Swords" />
             </button>
           </li>
 
           <li class="l-buttons__items">
-            <button class="l-buttons__button l-buttons__button--heal">
+            <button @click="heal" class="l-buttons__button l-buttons__button--heal">
               Heal ({{healCount}})
               <img class="l-buttons__image" src="./images/svg/magic-wand.svg" alt="Magic Wand" />
             </button>
           </li>
 
           <li class="l-buttons__items">
-            <button @click="surrender" class="l-buttons__button l-buttons__button--get-away">
+            <button @click="surrenderGame" class="l-buttons__button l-buttons__button--get-away">
               Surrender
               <img class="l-buttons__image" src="./images/svg/logout.svg" alt="Logout" />
             </button>
@@ -95,13 +98,9 @@
       <section v-if="log" class="l-log u-container">
         <ul class="l-log__list">
           <li class="l-log__item">
-            <ul class="l-log__list-row">
-              <li class="l-log__item-row l-log__item-row--jogador">
-                O jogador atingiu o monstro com 6.
-              </li>
-              <li class="l-log__item-row l-log__item-row--monstro">
-                O monstro atingiu o jogador com 9.
-              </li>
+            <ul v-for="item in logList" class="l-log__list-row">
+              <li class="l-log__item-row l-log__item-row--jogador">{{ item.player }}</li>
+              <li class="l-log__item-row l-log__item-row--monstro">{{ item.monster }}</li>
             </ul>
           </li>
         </ul>
