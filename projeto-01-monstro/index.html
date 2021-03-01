@@ -1,112 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+    <head>
+        <meta charset="UTF-8" />
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="reset.css" />
+        <link rel="stylesheet" href="style.css" />
 
-    <script src="https://unpkg.com/vue"></script>
+        <script src="https://unpkg.com/vue"></script>
 
-    <title>Monster's Slayer</title>
-  </head>
+        <title>Monster's Slayer</title>
+    </head>
 
-  <body>
-    <div id="app">
-      <section class="l-life u-container">
-        <div class="l-life__column">
-          <div class="l-life__name">player</div>
+    <body>
+        <div id="app">
+            <section class="l-life u-container">
+                <div class="l-life__column">
+                    <div class="l-life__name">player</div>
 
-          <div class="l-life__bar">
-            <div
-              :style="[{width : playerWidth}, {backgroundColor: playerProgressColor}]"
-              class="l-life__progress"
-            ></div>
-          </div>
+                    <div class="l-life__bar">
+                        <div
+                            class="l-life__progress"
+                            :class="[{'l-life__progress--warning' : playerLife <= 50}, {'l-life__progress--danger' : playerLife <= 25}]"
+                            :style="{width : playerLife + '%'}"
+                        ></div>
+                    </div>
 
-          <div class="l-life__percent">{{playerLife}}%</div>
+                    <div class="l-life__percent">{{playerLife}}%</div>
+                </div>
+
+                <div class="l-life__column">
+                    <div class="l-life__name">Monster</div>
+
+                    <div class="l-life__bar">
+                        <div
+                            class="l-life__progress"
+                            :class="[{'l-life__progress--warning' : monsterLife <= 50}, {'l-life__progress--danger' : monsterLife <= 25}]"
+                            :style="{width : monsterLife + '%'}"
+                        ></div>
+                    </div>
+
+                    <div class="l-life__percent">{{monsterLife}}%</div>
+                </div>
+            </section>
+
+            <section v-if="hasResult" class="l-warning u-container">
+                <h1 v-if="playerLife == 0 && monsterLife > 0" class="l-warning__text">You Lose</h1>
+                <h1 v-else-if="monsterLife == 0 && playerLife >0" class="l-warning__text">
+                    You Win
+                </h1>
+                <h1 v-else-if="monsterLife == 0 && playerLife == 0" class="l-warning__text">
+                    Tired
+                </h1>
+                <h1 v-if="surrendered" class="l-warning__text">
+                    You ran crying like a little baby!
+                </h1>
+            </section>
+
+            <section v-if="start" class="l-buttons u-container">
+                <button @click="startGame" class="l-buttons__button l-buttons__button--start">
+                    Start the Game
+                    <img
+                        class="l-buttons__image"
+                        src="./images/svg/play-button.svg"
+                        alt="Play Button"
+                    />
+                </button>
+            </section>
+
+            <section v-if="playAgain" class="l-buttons u-container">
+                <button @click="startGame" class="l-buttons__button l-buttons__button--restart">
+                    Play again?
+                    <img
+                        class="l-buttons__image"
+                        src="./images/svg/go-back.svg"
+                        alt="Play Button"
+                    />
+                </button>
+            </section>
+
+            <section v-if="running" class="l-buttons u-container">
+                <ul class="l-buttons__list">
+                    <li class="l-buttons__items">
+                        <button
+                            @click="attack(false)"
+                            class="l-buttons__button l-buttons__button--attack"
+                        >
+                            Attack
+                            <img
+                                class="l-buttons__image"
+                                src="./images/svg/sword.svg"
+                                alt="Sword"
+                            />
+                        </button>
+                    </li>
+
+                    <li class="l-buttons__items">
+                        <button
+                            @click="attack(true)"
+                            class="l-buttons__button l-buttons__button--special-attack"
+                        >
+                            Special Attack ({{specialAttackCount}})
+                            <img
+                                class="l-buttons__image"
+                                src="./images/svg/swords.svg"
+                                alt="Swords"
+                            />
+                        </button>
+                    </li>
+
+                    <li class="l-buttons__items">
+                        <button
+                            @click="healAndHurt"
+                            class="l-buttons__button l-buttons__button--heal"
+                        >
+                            Heal ({{healCount}})
+                            <img
+                                class="l-buttons__image"
+                                src="./images/svg/magic-wand.svg"
+                                alt="Magic Wand"
+                            />
+                        </button>
+                    </li>
+
+                    <li class="l-buttons__items">
+                        <button
+                            @click="surrenderGame"
+                            class="l-buttons__button l-buttons__button--get-away"
+                        >
+                            Surrender
+                            <img
+                                class="l-buttons__image"
+                                src="./images/svg/logout.svg"
+                                alt="Logout"
+                            />
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <section v-if="logs.length" class="l-log u-container">
+                <ul class="l-log__list">
+                    <li v-for="log in logs" class="l-log__item" :class="log.cls">{{ log.text }}</li>
+                </ul>
+            </section>
         </div>
 
-        <div class="l-life__column">
-          <div class="l-life__name">Monster</div>
-
-          <div class="l-life__bar">
-            <div
-              :style="[{width : monsterWidth}, {backgroundColor: monsterProgressColor}]"
-              class="l-life__progress"
-            ></div>
-          </div>
-
-          <div class="l-life__percent">{{monsterLife}}%</div>
-        </div>
-      </section>
-
-      <section v-if="warning" class="l-warning u-container">
-        <h1 class="l-warning__text">{{warningText}}</h1>
-      </section>
-
-      <section v-if="start" class="l-buttons u-container">
-        <button @click="startGame" class="l-buttons__button l-buttons__button--start">
-          Start the Game
-          <img class="l-buttons__image" src="./images/svg/play-button.svg" alt="Play Button" />
-        </button>
-      </section>
-
-      <section v-if="playAgain" class="l-buttons u-container">
-        <button @click="restartGame" class="l-buttons__button l-buttons__button--restart">
-          Play again?
-          <img class="l-buttons__image" src="./images/svg/go-back.svg" alt="Play Button" />
-        </button>
-      </section>
-
-      <section v-if="attackButtons" class="l-buttons u-container">
-        <ul class="l-buttons__list">
-          <li class="l-buttons__items">
-            <button @click="attack(1)" class="l-buttons__button l-buttons__button--attack">
-              Attack
-              <img class="l-buttons__image" src="./images/svg/sword.svg" alt="Sword" />
-            </button>
-          </li>
-
-          <li class="l-buttons__items">
-            <button @click="attack(2)" class="l-buttons__button l-buttons__button--special-attack">
-              Special Attack ({{specialAttackCount}})
-              <img class="l-buttons__image" src="./images/svg/swords.svg" alt="Swords" />
-            </button>
-          </li>
-
-          <li class="l-buttons__items">
-            <button @click="heal" class="l-buttons__button l-buttons__button--heal">
-              Heal ({{healCount}})
-              <img class="l-buttons__image" src="./images/svg/magic-wand.svg" alt="Magic Wand" />
-            </button>
-          </li>
-
-          <li class="l-buttons__items">
-            <button @click="surrenderGame" class="l-buttons__button l-buttons__button--get-away">
-              Surrender
-              <img class="l-buttons__image" src="./images/svg/logout.svg" alt="Logout" />
-            </button>
-          </li>
-        </ul>
-      </section>
-
-      <section v-if="log" class="l-log u-container">
-        <ul class="l-log__list">
-          <li class="l-log__item">
-            <ul v-for="item in logList" class="l-log__list-row">
-              <li class="l-log__item-row l-log__item-row--jogador">{{ item.player }}</li>
-              <li class="l-log__item-row l-log__item-row--monstro">{{ item.monster }}</li>
-            </ul>
-          </li>
-        </ul>
-      </section>
-    </div>
-
-    <script src="app.js"></script>
-  </body>
+        <script src="app.js"></script>
+    </body>
 </html>

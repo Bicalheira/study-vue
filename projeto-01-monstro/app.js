@@ -1,156 +1,99 @@
 new Vue({
-  el: "#app",
-  data: {
-    warning: false,
-    warningText: "",
-    start: true,
-    playAgain: false,
-    attackButtons: false,
-    specialAttackCount: 3,
-    healCount: 5,
-    log: false,
-    playerLife: 100,
-    monsterLife: 100,
-    playerProgressColor: "#75dd7a",
-    monsterProgressColor: "#75dd7a",
-    playerWidth: "100%",
-    monsterWidth: "100%",
-    logList: [],
-  },
-  methods: {
-    startGame() {
-      this.start = false;
-      this.attackButtons = true;
-      this.log = true;
+    el: "#app",
+    data: {
+        running: false,
+        start: true,
+        playerLife: 100,
+        monsterLife: 100,
+        logs: [],
+
+        surrendered: false,
+        playAgain: false,
+        specialAttackCount: 3,
+        healCount: 5,
     },
-    randomValues(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    },
-
-    attack(multiply) {
-      let damageMonster = this.randomValues(10, 15);
-      let damagePlayer = 0;
-
-      if (multiply > 1) {
-        if (this.specialAttackCount > 0) {
-          this.specialAttackCount--;
-          damagePlayer = this.randomValues(5 * multiply, 10 * multiply);
-        } else {
-          alert("You do not have more Special Attacks");
-          damageMonster = 0;
-        }
-      } else {
-        damagePlayer = this.randomValues(5, 10);
-      }
-
-      this.playerLife -= damageMonster;
-      this.monsterLife -= damagePlayer;
-
-      this.logList.push({
-        player: "The player received " + damageMonster + " of damage",
-        monster: "The monster received " + damagePlayer + " of damage",
-      });
-    },
-
-    heal() {
-      let damageMonster = this.randomValues(10, 15);
-      let damageHeal = this.randomValues(15, 20);
-
-      if (this.healCount > 0) {
-        if (this.playerLife >= 100) {
-          alert("Your life is full");
-          damageMonster = 0;
-          damageHeal = 0;
-        } else {
-          this.healCount--;
-
-          if (this.playerLife + damageHeal - damageMonster > 100) {
+    methods: {
+        startGame() {
+            this.running = true;
             this.playerLife = 100;
-          } else {
-            this.playerLife += damageHeal;
-            this.playerLife -= damageMonster;
-          }
-        }
-        this.logList.push({
-          player: "The player received " + damageMonster + " of damage",
-          monster: "The player healed " + damageHeal + " of damage",
-        });
-      }
-    },
+            this.monsterLife = 100;
+            this.logs = [];
 
-    restartGame() {
-      this.warning = false;
-      this.warningText = "";
-      this.start = false;
-      this.playAgain = false;
-      this.attackButtons = true;
-      this.specialAttackCount = 3;
-      this.healCount = 5;
-      this.log = true;
-      this.playerLife = 100;
-      this.monsterLife = 100;
-      this.logList = [];
-    },
+            this.surrendered = false;
+            this.start = false;
+            this.playAgain = false;
+            this.specialAttackCount = 3;
+            this.healCount = 5;
+        },
 
-    surrenderGame() {
-      this.warning = true;
-      this.warningText = "You ran crying like a little baby!";
-      this.playAgain = true;
-      this.attackButtons = false;
-      this.log = false;
-    },
+        getRandom(min, max) {
+            const value = Math.floor(Math.random() * (max - min + 1)) + min;
+            return Math.round(value);
+        },
 
-    verifyValue(value) {
-      if (value <= 0) {
-        this.attackButtons = false;
-        this.log = false;
-        this.warning = true;
-        this.playAgain = true;
-        this.winner();
-        return 0;
-      }
-      return value;
-    },
+        attack(special) {
+            this.hurt("monsterLife", 5, 10, special, "Player", "Monster", "l-log__item--player");
 
-    winner() {
-      if (this.playerLife <= 0 && this.monsterLife > 0) {
-        this.warningText = "You lose!";
-      } else if (this.playerLife <= 0 && this.monsterLife <= 0) {
-        this.warningText = "Tied";
-      } else {
-        this.warningText = "You win!";
-      }
-    },
+            if (this.monsterLife > 0) {
+                this.hurt("playerLife", 7, 15, false, "Monster", "Player", "l-log__item--monster");
+            }
+        },
 
-    progressDamage(value) {
-      return value + "%";
-    },
+        hurt(prop, min, max, special, source, target, cls) {
+            let plus = 0;
 
-    progressColor(value) {
-      if (value <= 50) {
-        if (value <= 25) {
-          return "red";
-        }
-        return "yellow";
-      }
-      return "#75dd7a";
+            if (special == true && this.specialAttackCount > 0) {
+                this.specialAttackCount--;
+                plus = 5;
+            }
+
+            console.log(plus);
+            // const plus = special ? 5 : 0;
+            const hurt = this.getRandom(min + plus, max + plus);
+            this[prop] = Math.max(this[prop] - hurt, 0);
+            this.registerLog(`The ${source} hit the ${target} with ${hurt} of damage`, cls);
+        },
+
+        healAndHurt() {
+            if (this.healCount > 0) {
+                this.healCount--;
+                this.heal(10, 15);
+                this.hurt("playerLife", 7, 12, false, "Monster", "Player", "l-log__item--monster");
+            } else {
+                alert("You can not use more heal!");
+            }
+        },
+
+        heal(min, max) {
+            const heal = this.getRandom(min, max);
+            this.playerLife = Math.min(this.playerLife + heal, 100);
+            this.registerLog(`Player has healed ${heal}%`, "l-log__item--healed");
+        },
+
+        registerLog(text, cls) {
+            this.logs.unshift({ text, cls });
+        },
+
+        surrenderGame() {
+            this.surrendered = true;
+            this.playAgain = true;
+            this.running = false;
+        },
     },
-  },
-  computed: {},
-  watch: {
-    playerLife(newValue, oldValue) {
-      newValue = this.verifyValue(newValue);
-      this.playerWidth = this.progressDamage(newValue);
-      this.playerProgressColor = this.progressColor(newValue);
-      this.playerLife = newValue;
+    computed: {
+        hasResult() {
+            if (this.surrendered == true) {
+                return true;
+            }
+            return this.playerLife == 0 || this.monsterLife == 0;
+        },
     },
-    monsterLife(newValue, oldValue) {
-      newValue = this.verifyValue(newValue);
-      this.monsterWidth = this.progressDamage(newValue);
-      this.monsterProgressColor = this.progressColor(newValue);
-      this.monsterLife = newValue;
+    watch: {
+        hasResult(value) {
+            if (value == true) {
+                this.running = false;
+                this.playAgain = true;
+            }
+        },
     },
-  },
 });

@@ -1,49 +1,49 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  padding: 15px;
+    padding: 15px;
 }
 
 html,
 body,
 button {
-  font-family: "Press Start 2P", cursive;
+    font-family: "Press Start 2P", cursive;
 }
 
 html {
-  height: 100%;
-  background-image: url("./images/scenario.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
+    height: 100%;
+    background-image: url("./images/scenario.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
 }
 
 button:focus {
-  outline: 0;
+    outline: 0;
 }
 
 /** Utilitários */
 
 .u-container:not(:last-child) {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .u-container {
-  background-color: rgba(255, 255, 255, 0.75);
+    background-color: rgba(255, 255, 255, 0.75);
 
-  border-radius: 5px;
+    border-radius: 5px;
 
-  padding: 15px;
+    padding: 15px;
 
-  -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25);
 }
 
 /** Otimização */
@@ -52,144 +52,143 @@ button:focus {
 .l-life__percent,
 .l-buttons__button,
 .l-log__item {
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 /** Seção da vida dos personagens */
 
 .l-life {
-  text-align: center;
+    text-align: center;
 
-  display: grid;
-  grid-template-columns: 45% 45%;
-  grid-gap: 10%;
+    display: grid;
+    grid-template-columns: 45% 45%;
+    grid-gap: 10%;
 }
 
 .l-life__name,
 .l-life__bar {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .l-life__name,
 .l-life__percent {
-  font-weight: bold;
-  font-size: 30px;
+    font-weight: bold;
+    font-size: 30px;
 }
 
 .l-life__bar {
-  width: 100%;
-  height: 40px;
+    width: 100%;
+    height: 40px;
 
-  border-width: 5px;
-  border-style: outset;
-  border-color: #5f2f21;
+    border-width: 5px;
+    border-style: outset;
+    border-color: #5f2f21;
 }
 
 .l-life__progress {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
+    background-color: #75dd7a;
+}
+
+.l-life__progress--warning {
+    background-color: #e1f00f;
+}
+
+.l-life__progress--danger {
+    background-color: #d41919;
 }
 
 /** Seção do quadro de aviso */
 .l-warning__text {
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 32px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 32px;
 }
 
 /** Seção dos botões do jogador */
 
 .l-buttons__list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
 }
 
 .l-buttons__button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  width: 100%;
-  padding: 15px;
+    width: 100%;
+    padding: 15px;
 
-  border-width: 5px;
+    border-width: 5px;
 
-  color: white;
+    color: white;
 }
 
 .l-buttons__image {
-  width: 30px;
-  margin-left: 30px;
+    width: 30px;
+    margin-left: 30px;
 }
 
 .l-buttons__button--start {
-  background-color: #635d5b;
-  border-color: #4c4745;
+    background-color: #635d5b;
+    border-color: #4c4745;
 }
 
 .l-buttons__button--restart {
-  background-color: #363332;
-  border-color: #353130;
+    background-color: #363332;
+    border-color: #353130;
 }
 
 .l-buttons__button--attack {
-  background-color: #f35f0a;
-  border-color: #e25a0b;
+    background-color: #f35f0a;
+    border-color: #e25a0b;
 }
 .l-buttons__button--special-attack {
-  background-color: #2089df;
-  border-color: #1f7fce;
+    background-color: #2089df;
+    border-color: #1f7fce;
 }
 .l-buttons__button--heal {
-  background-color: #16af16;
-  border-color: #149b14;
+    background-color: #16af16;
+    border-color: #149b14;
 }
 .l-buttons__button--get-away {
-  background-color: #d41616;
-  border-color: #be1515;
+    background-color: #d41616;
+    border-color: #be1515;
 }
 
 /** Seção do log de batalha */
 
 .l-log__list {
-  max-height: 300px;
+    max-height: 300px;
 
-  overflow-y: auto;
+    overflow-y: auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
 }
 
 .l-log__item {
-  display: flex;
-  flex-direction: column-reverse;
+    border-width: 5px;
+    border-style: outset;
+
+    text-align: center;
+
+    padding: 15px;
+
+    color: white;
 }
 
-.l-log__list-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
+.l-log__item--player,
+.l-log__item--healed {
+    background-color: #14d1d1;
+    border-color: #12b6b6;
 }
 
-.l-log__list-row:not(:first-child) {
-  margin-bottom: 30px;
-}
-
-.l-log__item-row {
-  border-width: 5px;
-  border-style: outset;
-
-  text-align: center;
-
-  padding: 15px;
-
-  color: white;
-}
-
-.l-log__item-row--jogador {
-  background-color: #14d1d1;
-  border-color: #12b6b6;
-}
-
-.l-log__item-row--monstro {
-  background-color: #540b7e;
-  border-color: #420863;
+.l-log__item--monster {
+    background-color: #540b7e;
+    border-color: #420863;
 }
